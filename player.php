@@ -10,11 +10,17 @@ class Player {
 		$CARD_RANK_MULTIPLIER = 50;
 		$FOLD_BELOW = 30;
 		$ALLIN_ABOVE = 80;
+		//$STACK_FOLD_BELOW = 200;
 
 		$my_player = $game_state['players'][$game_state['in_action']];
 
+		//if ($my_player['stack'] < $STACK_FOLD_BELOW) {
+		//	return 0;
+		//}
+
 		$minimum_bet = $game_state['current_buy_in'] - $my_player['bet'] + $game_state['minimum_raise'];
 		$cards = array_merge($my_player['hole_cards'], $game_state['community_cards']);
+		$turn = $game_state['orbits'];
 
 		$hole_cards_sum = 0;
 		foreach($my_player['hole_cards'] as $card) {
@@ -45,6 +51,12 @@ class Player {
 		}
 
 		$evalpoints += ($finalRank * $CARD_RANK_MULTIPLIER);
+		if($turn < 6) {
+			$evalpoints-=30;
+		}
+
+
+
 		if($evalpoints < $FOLD_BELOW) {
 			return 0;
 		} else if ($evalpoints > $ALLIN_ABOVE) {
@@ -52,6 +64,7 @@ class Player {
 		}
 
 		$ret = $minimum_bet;
+
 		return $ret;
 	}
 
