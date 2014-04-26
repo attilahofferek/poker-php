@@ -5,6 +5,12 @@ class Player {
 	const VERSION = "AllLean 0.2";
 
 	public function betRequest($game_state) {
+
+		$HOLE_CARD_AVG_MULTIPLIER = 4;
+		$CARD_RANK_MULTIPLIER = 50;
+		$FOLD_BELOW = 30;
+		$ALLIN_ABOVE = 80;
+
 		$my_player = $game_state['players'][$game_state['in_action']];
 
 		$minimum_bet = $game_state['current_buy_in'] - $my_player['bet'] + $game_state['minimum_raise'];
@@ -17,7 +23,7 @@ class Player {
 		}
 		$hole_cards_avg = $hole_cards_sum/count($my_player['hole_cards']);
 
-		$evalpoints = $hole_cards_avg * 4;
+		$evalpoints = $hole_cards_avg * $HOLE_CARD_AVG_MULTIPLIER;
 		$finalRank = 0;
 		$card_count = count($cards);
 		$player_count = 0;
@@ -38,10 +44,10 @@ class Player {
 			$finalRank = max($counts)-1;
 		}
 
-		$evalpoints += ($finalRank * 50);
-		if($evalpoints < 20) {
+		$evalpoints += ($finalRank * $CARD_RANK_MULTIPLIER);
+		if($evalpoints < $FOLD_BELOW) {
 			return 0;
-		} else if ($evalpoints > 80) {
+		} else if ($evalpoints > $ALLIN_ABOVE) {
 			return 100000;
 		}
 
