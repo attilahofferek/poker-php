@@ -47,7 +47,7 @@ class Player {
 			foreach ($cards as $card) {
 				$counts[$card['rank']] ++;
 			}
-			$finalRank = max($counts)-1;
+			$finalRank = (max($counts)-1)*4;
 		}
 
 		$evalpoints += ($finalRank * $CARD_RANK_MULTIPLIER);
