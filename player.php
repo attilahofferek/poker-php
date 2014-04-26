@@ -10,8 +10,23 @@ class Player {
 		$minimum_bet = $game_state['current_buy_in'] - $my_player['bet'] + $game_state['minimum_raise'];
 		$cards = array_merge($my_player['hole_cards'], $game_state['community_cards']);
 
+		$hole_cards_sum = 0;
+		foreach($my_player['hole_cards'] as $card) {
+			$from = array('J'=>11, 'Q'=>12, 'K'=>13, 'A'=>14);
+			$hole_cards_sum += strtr($card['rank'], $from);
+		}
+		$hole_cards_avg = $hole_cards_sum/count($my_player['hole_cards']);
+
+		$evalpoints = $hole_cards_avg * 4;
 		$finalRank = 0;
 		$card_count = count($cards);
+		$player_count = 0;
+		foreach($game_state['players'] as $player) {
+			if($player['status'] == 'active') {
+				$player_count++;
+			}
+		}
+
 		if( $card_count >= 5) {
 			$rank = $this->getRanking($cards);
 			$finalRank = $rank['rank'];
@@ -23,7 +38,14 @@ class Player {
 			$finalRank = max($counts)-1;
 		}
 
-		$ret = $minimum_bet + ($finalRank * 20);
+		$evalpoints += ($finalRank * 50);
+		if($evalpoints < 20) {
+			return 0;
+		} else if ($evalpoints > 80) {
+			return 100000;
+		}
+
+		$ret = $minimum_bet;
 		return $ret;
 	}
 
