@@ -50,7 +50,9 @@ class Player {
 			$finalRank = (max($counts)-1)*4;
 		}
 		if(max($counts) < 2 && ($hole_cards_avg < 7)) {
-			return 0;
+			if($my_player['bet'] < 100 || $my_player['bet'] > 600) {
+				return 0;
+			}
 		}
 
 		$evalpoints += ($finalRank * $CARD_RANK_MULTIPLIER);
