@@ -12,8 +12,8 @@ class Player {
 
 		$counts = array();
 
-//		$rank = $this->getRanking($cards);
-//		$this->logVar($rank);
+		$rank = $this->getRanking($cards);
+		var_dump($rank);
 
 		foreach ($cards as $card) {
 			$counts[$card['rank']] ++;
@@ -23,19 +23,18 @@ class Player {
 		return $ret;
 	}
 
-	/*private function getRanking($cards) {
+	private function getRanking($cards) {
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, true);
 		$send = json_encode(array("cards" => $cards));
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $send));
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $send);
 		curl_setopt($curl, CURLOPT_PORT, 2048);
-		curl_setopt($curl, CURLOPT_URL, 'http://10.1.2.118/');
+		curl_setopt($curl, CURLOPT_URL, 'http://localhost/');
 		$ret = curl_exec($curl);
-		$this->logVar($ret);
 
 		return json_decode($ret, 1);
-	}*/
+	}
 
 	public function showdown($game_state) {
 
