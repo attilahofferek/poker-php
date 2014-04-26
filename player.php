@@ -8,7 +8,7 @@ class Player {
 
 		$HOLE_CARD_AVG_MULTIPLIER = 4;
 		$CARD_RANK_MULTIPLIER = 50;
-		$FOLD_BELOW = 30;
+		$FOLD_BELOW = 25;
 		$ALLIN_ABOVE = 80;
 		//$STACK_FOLD_BELOW = 200;
 
@@ -50,9 +50,8 @@ class Player {
 			$finalRank = (max($counts)-1)*4;
 		}
 		if(max($counts) < 2 && ($hole_cards_avg < 7)) {
-			if($my_player['bet'] < 100 || $my_player['bet'] > 600) {
-				return 0;
-			}
+			if($my_player['bet'] < 100 && $my_player['bet'] > 600)
+			return 0;
 		}
 
 		$evalpoints += ($finalRank * $CARD_RANK_MULTIPLIER);
