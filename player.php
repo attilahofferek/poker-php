@@ -7,16 +7,23 @@ class Player {
 	public function betRequest($game_state) {
 		$my_player = $game_state['players'][$game_state['in_action']];
 
-		$required_bet = $game_state['minimum_raise'];
+		$minimum_bet = $game_state['current_buy_in'] - $my_player['bet'] + $game_state['minimum_raise'];
 		$cards = array_merge($my_player['hole_cards'], $game_state['community_cards']);
 
-		$counts = array();
-		foreach ($cards as $card) {
-			$counts[$card['rank']] ++;
+		$finalRank = 0;
+		$card_count = count($cards);
+		if( $card_count >= 5) {
+			$rank = $this->getRanking($cards);
+			$finalRank = $rank['rank'];
+		} else {
+			$counts = array();
+			foreach ($cards as $card) {
+				$counts[$card['rank']] ++;
+			}
+			$finalRank = max($counts)-1;
 		}
 
-		$max = max($counts) * 2;
-		$ret = $required_bet + (($max - 1) * 10);
+		$ret = $minimum_bet + ($finalRank * 20);
 		return $ret;
 	}
 
@@ -25,7 +32,6 @@ class Player {
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, true);
 		$send = json_encode($cards);
-		var_dump($send);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, "cards=".$send);
 		curl_setopt($curl, CURLOPT_PORT, 2048);
 		curl_setopt($curl, CURLOPT_URL, 'http://localhost/');
