@@ -11,13 +11,10 @@ class Player {
 		$cards = array_merge($my_player['hole_cards'], $game_state['community_cards']);
 
 		$counts = array();
-
-		$rank = $this->getRanking($cards);
-		var_dump($rank);
-
 		foreach ($cards as $card) {
 			$counts[$card['rank']] ++;
 		}
+
 		$max = max($counts) * 2;
 		$ret = $required_bet + (($max - 1) * 10);
 		return $ret;
@@ -27,8 +24,9 @@ class Player {
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($curl, CURLOPT_POST, true);
-		$send = json_encode(array("cards" => $cards));
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $send);
+		$send = json_encode($cards);
+		var_dump($send);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, "cards=".$send);
 		curl_setopt($curl, CURLOPT_PORT, 2048);
 		curl_setopt($curl, CURLOPT_URL, 'http://localhost/');
 		$ret = curl_exec($curl);
