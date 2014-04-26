@@ -2,18 +2,27 @@
 
 class Player
 {
-	const VERSION = "AllLean 0.1";
+	const VERSION = "AllLean 0.2";
 
 	public function betRequest($game_state)
 	{
-		$my_player = array();
+		$my_player = $game_state['players'][$game_state['in_action']];
+
 		foreach($game_state['players'] as $player) {
-			if (array_key_exists("hole_cards", $player)) {
+			if ($player['version'] == Player::VERSION) {
 				$my_player = $player;
 			}
 		}
 
-		return $game_state['current_buy_in'] - $my_player['bet'];
+		$required_bet = $game_state['minimum_raise'];
+		$cards = array_merge($my_player['hole_cards'], $game_state['community_cards']);
+		$counts = array();
+		foreach( $cards as $card) {
+			$counts[$card['rank']]++;
+		}
+		$max = max($counts)*2;
+		$ret = $required_bet + (($max - 1)*10);
+		return $ret;
 	}
 
 	public function showdown($game_state)
