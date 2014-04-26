@@ -49,7 +49,7 @@ class Player {
 			}
 			$finalRank = (max($counts)-1)*4;
 		}
-		if(max($counts) < 2) {
+		if(max($counts) < 2 && ($hole_cards_avg < 7)) {
 			return 0;
 		}
 
