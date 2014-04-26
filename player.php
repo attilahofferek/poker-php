@@ -8,12 +8,6 @@ class Player
 	{
 		$my_player = $game_state['players'][$game_state['in_action']];
 
-		foreach($game_state['players'] as $player) {
-			if ($player['version'] == Player::VERSION) {
-				$my_player = $player;
-			}
-		}
-
 		$required_bet = $game_state['minimum_raise'];
 		$cards = array_merge($my_player['hole_cards'], $game_state['community_cards']);
 		$counts = array();
