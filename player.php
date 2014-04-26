@@ -6,6 +6,8 @@ class Player {
 
 	public function betRequest($game_state) {
 
+		return 0;
+		
 		$HOLE_CARD_AVG_MULTIPLIER = 4;
 		$CARD_RANK_MULTIPLIER = 50;
 		$FOLD_BELOW = 30;
